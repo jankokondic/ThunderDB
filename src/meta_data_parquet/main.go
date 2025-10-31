@@ -32,6 +32,7 @@ type FileMetadata struct {
 	NumRows      int64             `json:"num_rows"`
 	CreatedBy    string            `json:"created_by,omitempty"`
 	Schema       []string          `json:"schema"`
+	Version      int32             `json:"version"`
 	KeyValueMeta map[string]string `json:"key_value_meta,omitempty"`
 	RowGroups    []RowGroupMeta    `json:"row_groups"`
 }
@@ -54,11 +55,12 @@ func main() {
 		log.Fatalf("cannot read footer: %v", err)
 	}
 
-	footer := pr.Footer // *parquet.FileMetaData
+	footer := pr.Footer
 
 	meta := FileMetadata{
 		NumRows:   footer.GetNumRows(),
 		CreatedBy: footer.GetCreatedBy(),
+		Version:   footer.GetVersion(),
 		Schema:    []string{},
 	}
 
@@ -121,4 +123,29 @@ func main() {
 
 	out, _ := json.MarshalIndent(meta, "", "  ")
 	fmt.Println(string(out))
+
+	total := pr.GetNumRows()
+	batchSize := 1000
+
+	for read := int64(0); read < total; {
+		n := batchSize
+		if total-read < int64(batchSize) {
+			n = int(total - read)
+		}
+
+		rows := make([]interface{}, n)
+		if err := pr.Read(&rows); err != nil {
+			log.Fatalf("read error: %v", err)
+		}
+
+		for _, row := range rows {
+			// row je tipa map[string]interface{}
+			r := row.(map[string]interface{})
+			fmt.Printf("FL_DATE=%v, DEP_DELAY=%v, ARR_DELAY=%v\n",
+				r["FL_DATE"], r["DEP_DELAY"], r["ARR_DELAY"])
+		}
+
+		read += int64(n)
+	}
+
 }

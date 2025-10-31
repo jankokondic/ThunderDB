@@ -1,0 +1,11 @@
+1. Table metadata (naziv baze, tabela, lokacija, format, particione kolone)
+
+2. Schema (kolone i tipovi)
+
+3. Lista/manifest fajlova (putanja do svakog Parquet fajla) — organizovana po particiji (ako tabela partiše)
+
+4. File-level metadata (veličina, mod time, broj redova ako postoji)
+
+
+manifest-based
+direct entry
