@@ -15,6 +15,7 @@ func main() {
 		Endpoints:   []string{"localhost:2379"}, // lista etcd servera
 		DialTimeout: 5 * time.Second,
 	})
+
 	if err != nil {
 		log.Fatalf("Failed to connect to etcd: %v", err)
 	}
@@ -30,7 +31,7 @@ func main() {
 	}
 
 	// Čitanje ključa
-	resp, err := cli.Get(ctx, "mykey")
+	resp, err := cli.Get(ctx, "mykey", clientv3.WithPrefix())
 	if err != nil {
 		log.Fatalf("Failed to get key: %v", err)
 	}
