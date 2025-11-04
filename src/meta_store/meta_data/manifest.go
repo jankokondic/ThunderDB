@@ -13,10 +13,10 @@ type Manifest struct {
 }
 
 type ManifestFile struct {
-	Path       string                       `json:"path"`
-	Length     int                          `json:"length"` //bits
-	RowCount   int                          `json:"row_count"`
-	FileStatus map[string]map[string]string `json:"file_stats"` //"file_stats": { "event_time": {"min":"2025-10-29T00:00:00","max":"2025-10-29T12:00:00", "null_count":0}, "amount":{"min":0.0,"max":1000.0} }
+	Path       string               `json:"path"`
+	Length     int                  `json:"length"` //bits
+	RowCount   int                  `json:"row_count"`
+	FileStatus map[string]FileStats `json:"file_stats"` //"file_stats": { "event_time": {"min":"2025-10-29T00:00:00","max":"2025-10-29T12:00:00", "null_count":0}, "amount":{"min":0.0,"max":1000.0} }
 }
 
 func NewManifest(old *Manifest, manifestFile ManifestFile) *Manifest {
@@ -34,7 +34,7 @@ func NewManifest(old *Manifest, manifestFile ManifestFile) *Manifest {
 	}
 }
 
-func NewManifestFile(Path string, Length int, RowCount int, FileState map[string]map[string]string) ManifestFile {
+func NewManifestFile(Path string, Length int, RowCount int, FileState map[string]FileStats) ManifestFile {
 	return ManifestFile{
 		Path:       Path,
 		Length:     Length,

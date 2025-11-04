@@ -7,7 +7,7 @@ import (
 
 const TABLE_PATH string = "metastore/tables"
 
-type Metadata struct {
+type TableProperties struct {
 	Database         string    `json:"database"`
 	Table            string    `json:"table"`
 	Location         string    `json:"location"`
@@ -18,8 +18,8 @@ type Metadata struct {
 	Version          int       `json:"version"`
 }
 
-func NewMetadata(Database, Table, Owner string, PartitionColumns []string) *Metadata {
-	return &Metadata{
+func NewTable(Database, Table, Owner string, PartitionColumns []string) *TableProperties {
+	return &TableProperties{
 		Database:         Database,
 		Table:            Table,
 		Location:         path.Join(TABLE_PATH, Database, Table),
