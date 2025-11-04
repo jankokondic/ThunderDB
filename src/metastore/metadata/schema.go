@@ -1,6 +1,7 @@
 package meta_data
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -19,6 +20,10 @@ type Field struct {
 	Name     string `json:"name"`
 	Type     string `json:"type"`
 	Nullable bool   `json:"nullable"`
+}
+
+func (s *Schema) GenerateKey(database, table string) string {
+	return fmt.Sprintf("metastore/tables/%s/%s/schema", database, table)
 }
 
 func CreateSchemaOnExistingFile() *Schema {

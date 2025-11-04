@@ -65,3 +65,34 @@ func (e *EtcdClient) Get(key string, timeout time.Duration) (string, error) {
 
 	return string(resp.Kvs[0].Value), nil
 }
+
+// GetAll retrieves all key-value pairs with the given prefix.
+// To get all keys, pass prefix = "".
+func (e *EtcdClient) GetAll(prefix string, timeout time.Duration) (map[string]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	resp, err := e.client.Get(ctx, prefix, clientv3.WithPrefix())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get keys with prefix '%s': %w", prefix, err)
+	}
+
+	result := make(map[string]string)
+	for _, kv := range resp.Kvs {
+		result[string(kv.Key)] = string(kv.Value)
+	}
+
+	return result, nil
+}
+
+func (e *EtcdClient) DeleteAll(prefix string, timeout time.Duration) error {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	_, err := e.client.Delete(ctx, prefix, clientv3.WithPrefix())
+	if err != nil {
+		return fmt.Errorf("failed to delete keys with prefix '%s': %w", prefix, err)
+	}
+
+	return nil
+}

@@ -1,6 +1,7 @@
 package meta_data
 
 import (
+	"fmt"
 	"path"
 	"time"
 )
@@ -29,4 +30,8 @@ func NewTable(Database, Table, Owner string, PartitionColumns []string) *TablePr
 		Owner:            Owner,
 		Version:          1,
 	}
+}
+
+func (t *TableProperties) GenerateKey() string {
+	return fmt.Sprintf("metastore/tables/%s/%s/metadata", t.Database, t.Table)
 }

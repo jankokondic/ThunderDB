@@ -3,6 +3,7 @@ package meta_data
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"fmt"
 	"log"
 	"math"
 	"os"
@@ -26,7 +27,10 @@ type FileStats struct {
 	NullCount int64       `json:"null_count,omitempty"`
 }
 
-// decodeMinMaxBytes — pretvara min/max bajtove u stvarne vrednosti
+func (p *ParquetMetadata) GenerateKey(database, table, name string) string {
+	return fmt.Sprintf("metastore/tables/%s/%s/files/%s", database, table, name)
+}
+
 func decodeMinMaxBytes(b []byte, parquetType string) interface{} {
 	if len(b) == 0 {
 		return nil

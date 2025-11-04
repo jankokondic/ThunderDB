@@ -19,6 +19,10 @@ type ManifestFile struct {
 	FileStatus map[string]FileStats `json:"file_stats"` //"file_stats": { "event_time": {"min":"2025-10-29T00:00:00","max":"2025-10-29T12:00:00", "null_count":0}, "amount":{"min":0.0,"max":1000.0} }
 }
 
+func (m *Manifest) GenerateKey(database, table string) string {
+	return fmt.Sprintf("metastore/tables/%s/%s/manifests/%s", database, table, m.ManifestId)
+}
+
 func NewManifest(old *Manifest, manifestFile ManifestFile) *Manifest {
 	var files []ManifestFile
 
