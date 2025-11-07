@@ -9,3 +9,17 @@
 
 manifest-based
 direct entry
+
+metastore/tables/prod/sessions/metadata
+metastore/tables/prod/sessions/schema
+metastore/tables/prod/sessions/manifests/m-20251031-0002
+metastore/tables/prod/sessions/latest_manifest -> "m-20251031-0002"
+metastore/tables/prod/sessions/manifest_index/year=2025/month=10 -> "m-20251031-0002"
+
+metastore/tables/{db}/{table}/metadata
+metastore/tables/{db}/{table}/schema
+metastore/tables/{db}/{table}/manifests/{manifest_id}
+metastore/tables/{db}/{table}/latest_manifest
+metastore/tables/{db}/{table}/manifest_index/{partition_spec}
+
+To je način da podeliš tabelu na više manjih “foldera” ili “segmenata”, obično po nekoj koloni koja se često koristi u filtrima (npr. year, month, region)
